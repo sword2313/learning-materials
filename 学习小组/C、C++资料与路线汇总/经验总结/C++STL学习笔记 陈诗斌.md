@@ -4,7 +4,7 @@
 > 
 > ### 前言（整体理解）
 > 
-> 其实从STL库的名称上就可以看出来，STL全称为：Standard Template Library，翻译过来就是：标准模版库。提取一下关键的两个字：模版，什么叫模版呢，应用范围广、可以直接套用的就是模版。我认为STL库的存在是C++和C最大的区别之一，也是最大的优点之一。举个简单的例子，STL库里主要包含了容器（Containers）、算法（Algorithms）、迭代器（iterators）等等，以算法为例，当我们引用<algorithm>头文件中的sort函数时，可以对数据进行排序，而在c语言中实现这样一个排序（例如冒泡排序），我们需要多次循环遍历数组，还要自定义一个swap函数用来进行交换，使用stl就省去了这样一个教程。用stl就相当于站在巨人的肩膀上，我们不用探究这些函数、还有容器等等是如何实现的，只需要掌握用法就行了，学会stl是可以大大节省编程时间的，也可以降低编程的复杂度。
+> 其实从STL库的名称上就可以看出来，STL全称为：Standard Template Library，翻译过来就是：标准模版库。提取一下关键的两个字：模版，什么叫模版呢，应用范围广、可以直接套用的就是模版。举个简单的例子，STL库里主要包含了容器（Containers）、算法（Algorithms）、迭代器（iterators）等等，以算法为例，当我们引用<algorithm>头文件中的sort函数时，可以对数据进行排序，而在c语言中实现这样一个排序（例如冒泡排序），我们需要多次循环遍历数组，还要自定义一个swap函数用来进行交换，使用stl就省去了这样一个教程。用stl就相当于站在巨人的肩膀上，我们不用探究这些函数、还有容器等等是如何实现的，只需要掌握用法就行了，学会stl是可以大大节省编程时间的，也可以降低编程的复杂度。
 > 
 > ## 1、容器
 > 
@@ -36,53 +36,116 @@
 > 
 > ###### 创建vector与初始化：
 > 
-> 在using namespace std；之后，直接：
-> 
->             vector<int> vec1;                          // 创建空的vector，名称为vec1
->             vector<int> vec2(5);                      // 创建长度为5的vector，元素全部初始化为0
->             vector<int> vec3(5, 10);                // 创建长度为5的vector，元素全部为10
->             vector<int> vec4 = {1, 2, 3, 4};      // 创建vector，元素为1、2、3、4
+> ```cpp
+> #include <iostream>
+> #include <vector>
+> using namespace std；
+> int main() 
+> {
+>     vector<int> vec1;         // 创建空的vector，名称为vec1
+>     vector<int> vec2(5);        // 创建长度为5的vector，元素全部初始化为0
+>     vector<int> vec3(5, 10);      // 创建长度为5的vector，元素全部为10
+>     vector<int> vec4 = {1, 2, 3, 4}; // 创建vector，元素为1、2、3、4
+> }
+> ```
 > 
 > ###### 赋值操作
 > 
->             vec1.assign(arr, arr + 5);            //将一个数组arr中的第1-5个元素赋值给一个名为vec1的vector
-> 
->                                                                 （为什么是arr+5而不是arr+4——因为assign后面的（arr，arr+5）是一个左闭右开的区间）
-> 
->             vec2=vec1                                    //将vec1中的所有数据赋值给vec2
-> 
->             vec3.assign（5，10）                //功能与初始化中提到的 vector<int> vec3(5, 10);类似，但现在这个是将5个10赋值给本身，
-> 
->                                                                   并没有规定vec3的长度
-> 
->             vec4.swap（vec5）                    //将vec4和vec5中的元素进行互换
+> ```cpp
+>             vec1.assign(arr, arr + 5);            //将一个数组arr中的第1-5个元素赋值给一个名为vec1的vector（为什么是arr+5而不是arr+4——因为assign后面的（arr，arr+5）是一个左闭右开的区间）
+>             vec2=vec1                           //将vec1中的所有数据赋值给vec2
+>             vec3.assign（5，10）                //功能与初始化中提到的 vector<int> vec3(5, 10);类似，但现在这个是将5个10赋值给本身，并没有规定vec3的长度
+>             vec4.swap（vec5）                    //将vec4和vec5中的元素进行互换
+> ```
 > 
 > ###### 关于大小的函数
 > 
->             vec1.size（）                    //返回值是vec1中的元素个数
-> 
->             vec2.empty（）               //判断vec2是否为空，空则返回1，不为空则返回0
-> 
->             m=vec3.max_size();        //此时m等于vec3所能容纳元素数量的最大值，一般是非常大的，我试了一下，返回值是2305843009213693951
+> ```c++
+> vec1.size（）;                    //返回值是vec1中的元素个数
+> vec2.empty（）;              //判断vec2是否为空，空则返回1，不为空则返回0
+> m=vec3.max_size();        //此时m等于vec3所能容纳元素数量的最大值，一般是非常大的，我试了一下，返回值是2305843009213693951
+> ```
 > 
 > ###### 元素的插入、删除、访问、清空
 > 
->             vec1.push_back(10);                                       //在vec1的末尾添加元素10
+> ```cpp
+> vec1.push_back(10);                               //在vec1的末尾添加元素10
+> vec1.insert(vec2.begin() + 3, 5) ；              //将5这个元素插入到vec1中索引为3的位置（第四个元素）（vec2.begin是vec2中的第一个元素）
+> vec1.insert(vec2.begin() + 3, 5)；               //在vec1中索引为3的位置插入10个5
+> n=vec2[0]；                                     //将vec2中的第一个元素赋值给n（与数组类似，可以在[]中输入下标来访问元素）
+> m=vec2.at(1);                                   //将vec2中的第一个元素赋值给m
+> vec3.erase(vec1.begin() + 3);                   //删除vec3中的第四个元素
+> vec3.pop_back();                               //移除vec3中的最后一个元素
+> vec4.clear();                                  //清空vec4  
+> ```
 > 
->             vec1.insert(vec2.begin() + 3, 5) ；                //将5这个元素插入到vec1中索引为3的位置（第四个元素）
+> ### 1.2 deque
 > 
->                                                                                        （vec2.begin是vec2中的第一个元素）
+> ##### 概念理解
 > 
->             vec1.insert(vec2.begin() + 3, 5)；               //在vec1中索引为3的位置插入10个5
+> deque的全称是double-ended queue，翻译过来就是：双端队列。为什么叫双端呢，因为在deque的两端都可以插入元素。回顾一下上一节的vector，在vector的任意位置都可以很便捷地插入元素，但是vector是一个单端的容器。原因是，比如说当我们在vector的头部插入一个元素时，由于vector的首地址不会变，所以新插入的元素会占用首地址，而原有的其他元素都会向后移动，但是deque不一样，deque插到头部就是插在原有首地址前面。这样的好处是，当我们在deque的头部插入元素，其实只进行了一步操作，在vector的头部插入时，vector中总共有几个元素，就进行了几步操作，当元素较多时，时间复杂度会远大于deque。
 > 
->             n=vec2[0]；                                                  //将vec2中的第一个元素赋值给n（与数组类似，可以在[]中输入下标来访问元素）
+> ##### 适用场景
 > 
->             m=vec2.at(1);                                               //将vec2中的第一个元素赋值给m
+> deque应用的应该是远不如vector广泛的，大部分时间用的都是vector，deque的内存并不是连续的，进行随机访问时需要根据元素的索引进行计算，而不是直接通过指针操作，这使得随机访问的性能较差，与  vector  相比，  deque  的底层实现通常由多个固定大小的缓冲区组成，这导致  deque  在存储元素时可能需要更多的内存空间。（以上回答由AI给出）
 > 
->             vec3.erase(vec1.begin() + 3);                     //删除vec3中的第四个元素
+> 总而言之，如果程序中需要频繁地（极其频繁地）在数组的头部插入元素，那就可以考虑使用deque
 > 
->             vec3.pop_back();                                         //移除vec3中的最后一个元素
+> ##### 使用
 > 
->             vec4.clear();                                                  //清空vec4
+> 由于deque与vector较为相似，只需记住几个deque中特殊的函数即可
+> 
+> ```cpp
+>     deq1.push_front(10);      //在deq1的头部添加元素10
+>     deq2.pop_front();         //移除deq3中的第一个元素
+> ```
+> 
+> ### 1.3 list
+> 
+> ##### 概念理解
+> 
+> list是链表，之前提到的vector和deque都可以快速地随机访问元素，这是list的一大缺点，list每次访问元素，都需要对整个列表做一次遍历，需要使用迭代器（后续会提到），以此来找到对应元素，但是相比前面的vector和deque，list插入和删除元素的速度要快上很多。由此，我们也可以得出list的应用场景：不怎么需要随机访问元素，但是要进行大量的元素插入和删除。还有一点，使用list多半意味着list内的元素是排好序的
+> 
+> ##### 使用
+> 
+> ###### 声明与初始化
+> 
+> ```c++
+> #include <iostream>
+> #include <list>
+> using namespace std；
+> int main() {
+>     list<int> lst1;                  // 空的list
+>     list<int> lst2(5);               // 包含5个默认初始化元素的list
+>     list<int> lst3(5, 10);           // 包含5个元素，每个元素为10
+>     list<int> lst4 = {1, 2, 3, 4};   // 使用初始化列表
+> 
+>     return 0;
+> }
+> ```
+
+> ###### 插入和删除元素
+> 
+> ```cpp
+>     //在头部和尾部的插入&删除
+>     lst.push_front(5);           // 在头部插入5
+>     lst.push_back(40);           // 在尾部插入40
+>     lst.pop_front();             // 删除头部元素
+>     lst.pop_back();              // 删除尾部元素
+>     //在list中间位置的插入&删除
+>     auto it = lst.begin();        //it用于定位到list的首个元素
+>     advance(it, 2);               // 移动迭代器到第3个元素（值为3）
+>     lst.insert(it, 10);           // 在第3个元素前插入10
+>     lst.erase(it);                // 删除第3个元素
+> ```
+
+> ###### 其他
+> 
+> ```cpp
+>     lst.sort();                    // 排序(由小到大)
+>     lst.unique();                  // 删除相邻重复元素（例如对于1 1 2 3，去重后即为1 2 3）
+>     lst1.merge(lst2);              // 合并两个已排序的链表（注意是已排序的链表，如果未排序，程序不会报错，但最终得到的链表将无序）
+>     lst1.reverse();                // 反转链表（如1 2 3 4将变为4 3 2 1）
+> ```
 
 
